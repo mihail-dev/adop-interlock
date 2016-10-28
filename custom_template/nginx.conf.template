@@ -19,6 +19,9 @@ server {
     {{ range $host := .Hosts }}
     {{ if ne $host.ContextRoot.Path "" }}
     location {{ $host.ContextRoot.Path }} {
+    {{ if eq $host.ContextRoot.Path "/gerrit" }}
+        client_max_body_size 512m;
+    {{ end }}
 	{{ if $host.ContextRootRewrite }}rewrite ^([^.]*[^/])$ $1/ permanent;
 	rewrite  ^{{ $host.ContextRoot.Path }}/(.*)  /$1 break;{{ end }}
 	proxy_pass http://ctx{{ $host.ContextRoot.Name }};

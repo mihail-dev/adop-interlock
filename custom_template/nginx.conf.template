@@ -68,9 +68,9 @@ server {
 	rewrite  ^{{ $host.ContextRoot.Path }}/(.*)  /$1 break;{{ end }}
 	proxy_pass http://ctx{{ $host.ContextRoot.Name }};
     }
+    {{ end }}
+    {{ end }}
     include /etc/nginx/sites-enabled/service-extension/*.conf;
-    {{ end }}
-    {{ end }}
 }
 {{ range $host := .Hosts }}
 {{ if ne $host.ContextRoot.Path "" }}

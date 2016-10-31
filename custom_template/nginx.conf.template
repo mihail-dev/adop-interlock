@@ -28,7 +28,6 @@ server {
 
         rewrite /sensu/(.*) /$1 break;
     }
-    {{ end }}
     {{ else }}
     {{ if eq $host.ContextRoot.Path "/kibana" }}
     location /kibana/status {

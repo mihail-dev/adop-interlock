@@ -55,6 +55,7 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         proxy_set_header Host $host;
+        rewrite /sensu/(.*) /$1 break;
     {{ else if eq $host.ContextRoot.Path "/ldap-ltb" }}
         proxy_set_header X-Real-IP  $remote_addr;
         proxy_set_header X-Forwarded-For $remote_addr;

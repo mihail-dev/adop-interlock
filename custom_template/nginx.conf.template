@@ -18,6 +18,18 @@ server {
     
     {{ range $host := .Hosts }}
     {{ if ne $host.ContextRoot.Path "" }}
+    {{ if eq $host.ContextRoot.Path "/sensu" }}
+     location ~ (/sensu/|/socket.io/) {
+        proxy_pass  http://ctx{{ $host.ContextRoot.Name }};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+
+        rewrite /sensu/(.*) /$1 break;
+    }
+    {{ end }}
+    {{ else }}
     {{ if eq $host.ContextRoot.Path "/kibana" }}
     location /kibana/status {
         proxy_pass http://ctx{{ $host.ContextRoot.Name }}/status;
@@ -69,6 +81,7 @@ server {
 	rewrite  ^{{ $host.ContextRoot.Path }}/(.*)  /$1 break;{{ end }}
 	proxy_pass http://ctx{{ $host.ContextRoot.Name }};
     }
+    {{ end }}
     {{ end }}
     {{ end }}
     include /etc/nginx/sites-enabled/service-extension/*.conf;

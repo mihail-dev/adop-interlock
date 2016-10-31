@@ -20,7 +20,7 @@ server {
     {{ if ne $host.ContextRoot.Path "" }}
     {{ if eq $host.ContextRoot.Path "/kibana" }}
     location /kibana/status {
-        proxy_pass         http://kibana:5601/status;
+        proxy_pass http://ctx{{ $host.ContextRoot.Name }}/status;
     }
 
     location /app/kibana/status {
